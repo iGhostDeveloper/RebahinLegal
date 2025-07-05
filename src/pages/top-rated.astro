@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MovieCard from '../components/MovieCard.astro';
+import { getTopRatedMovies } from '../utils/tmdb.js';
+
+const url = new URL(Astro.request.url);
+const page = parseInt(url.searchParams.get('page') || '1');
+
+const topRatedMovies = await getTopRatedMovies(page);
+const totalPages = topRatedMovies?.total_pages || 0;
+---
+
+<Layout title="Top Rated Movies - MovieHub">
+  <Header />
+  
+  <main class="min-h-screen bg-dark-900">
+    <div class="container mx-auto px-4 py-8">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Top Rated Movies</h1>
+        <p class="text-gray-400">
+          Discover the highest rated movies of all time
+          {totalPages > 1 && ` (Page ${page} of ${totalPages})`}
+        </p>
+      </div>
+
+      <!-- Movies Grid -->
+      {topRatedMovies?.results && topRatedMovies.results.length > 0 ? (
+        <div>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-12">
+            {topRatedMovies.results.map((movie) => (
+              <MovieCard movie={movie} />
+            ))}
+          </div>
+
+          <!-- Pagination -->
+          {totalPages > 1 && (
+            <div class="flex justify-center items-center space-x-2">
+              <!-- Previous Page -->
+              {page > 1 && (
+                <a
+                  href={`/top-rated?page=${page - 1}`}
+                  class="bg-dark-800 hover:bg-dark-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                  <span>Previous</span>
+                </a>
+              )}
+
+              <!-- Page Numbers -->
+              <div class="flex items-center space-x-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (page <= 3) {
+                    pageNum = i + 1;
+                  } else if (page >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = page - 2 + i;
+                  }
+
+                  const isCurrentPage = pageNum === page;
+                  
+                  return (
+                    <a
+                      href={`/top-rated?page=${pageNum}`}
+                      class={isCurrentPage
+                        ? 'bg-blue-600 text-white px-3 py-2 rounded-lg transition-colors'
+                        : 'bg-dark-800 hover:bg-dark-700 text-gray-300 hover:text-white px-3 py-2 rounded-lg transition-colors'
+                      }
+                    >
+                      {pageNum}
+                    </a>
+                  );
+                })}
+              </div>
+
+              <!-- Next Page -->
+              {page < totalPages && (
+                <a
+                  href={`/top-rated?page=${page + 1}`}
+                  class="bg-dark-800 hover:bg-dark-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+                >
+                  <span>Next</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      ) : (
+        <!-- No Results -->
+        <div class="text-center py-16">
+          <div class="mb-6">
+            <svg class="w-24 h-24 text-gray-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2h4a1 1 0 110 2h-1v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6H3a1 1 0 110-2h4z"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-white mb-4">No movies found</h2>
+          <p class="text-gray-400">Unable to load top rated movies at this time.</p>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

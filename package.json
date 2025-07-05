@@ -1,14 +1,21 @@
 {
-  "name": "movie",
+  "name": "movie-hub",
+  "version": "1.0.0",
   "type": "module",
-  "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
+  "keywords": ["astro", "movie", "tmdb", "tailwind"],
+  "author": "",
+  "license": "ISC",
+  "description": "A modern movie discovery website built with Astro and TMDB API",
   "dependencies": {
-    "astro": "^5.11.0"
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.11.0",
+    "tailwindcss": "^3.4.17"
   }
 }
