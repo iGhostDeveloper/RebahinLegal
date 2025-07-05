@@ -5,7 +5,13 @@ const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 // Helper function to make API requests
 async function fetchFromTMDB(endpoint) {
   try {
-    const url = `${BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}`;
+    // Clean up endpoint and ensure proper URL formation
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const separator = cleanEndpoint.includes('?') ? '&' : '?';
+    const url = `${BASE_URL}${cleanEndpoint}${separator}api_key=${API_KEY}`;
+    
+    console.log('Fetching URL:', url); // Debug log
+    
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
