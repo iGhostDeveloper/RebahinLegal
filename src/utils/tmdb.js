@@ -10,7 +10,6 @@ async function fetchFromTMDB(endpoint) {
     const separator = cleanEndpoint.includes('?') ? '&' : '?';
     const url = `${BASE_URL}${cleanEndpoint}${separator}api_key=${API_KEY}`;
     
-    console.log('Fetching URL:', url); // Debug log
     
     const response = await fetch(url);
     if (!response.ok) {

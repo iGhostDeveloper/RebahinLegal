@@ -9,11 +9,17 @@
     "preview": "astro preview",
     "astro": "astro"
   },
-  "keywords": ["astro", "movie", "tmdb", "tailwind"],
+  "keywords": [
+    "astro",
+    "movie",
+    "tmdb",
+    "tailwind"
+  ],
   "author": "",
   "license": "ISC",
   "description": "A modern movie discovery website built with Astro and TMDB API",
   "dependencies": {
+    "@astrojs/node": "^9.3.0",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.11.0",
     "tailwindcss": "^3.4.17"
