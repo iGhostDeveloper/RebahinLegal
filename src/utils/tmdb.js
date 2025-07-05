@@ -5,7 +5,8 @@ const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 // Helper function to make API requests
 async function fetchFromTMDB(endpoint) {
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}`);
+    const url = `${BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}`;
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
